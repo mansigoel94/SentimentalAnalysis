@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_all"
+        android:title="All apps" />
+    <item
+        android:id="@+id/menu_fraud"
+        android:title="Fraud Apps" />
+    <item
+        android:id="@+id/menu_fair"
+        android:title="Fair Apps" />
+</menu>
