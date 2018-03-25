@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis;
+package com.example.sentimentalanalysis;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

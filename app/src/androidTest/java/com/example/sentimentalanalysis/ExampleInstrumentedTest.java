@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis;
+package com.example.sentimentalanalysis;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.mansi.sentimentalanalysis", appContext.getPackageName());
+        assertEquals("com.example.sentimentalanalysis", appContext.getPackageName());
     }
 }

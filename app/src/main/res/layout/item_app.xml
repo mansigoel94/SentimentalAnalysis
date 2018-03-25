@@ -57,14 +57,11 @@
         android:id="@+id/tv_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="4.5"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_star"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,12 +69,33 @@
         android:id="@+id/iv_star"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_rating"
+        app:srcCompat="@drawable/ic_star" />
+
+    <TextView
+        android:id="@+id/tv_senti_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="100%"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_thumb_ic"
+        app:layout_constraintEnd_toStartOf="@+id/iv_thumb_ic"
+        app:layout_constraintTop_toTopOf="@+id/iv_thumb_ic" />
+
+    <ImageView
+        android:id="@+id/iv_thumb_ic"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_star" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_rating"
+        app:srcCompat="@drawable/ic_thumbs_up" />
 </android.support.constraint.ConstraintLayout>

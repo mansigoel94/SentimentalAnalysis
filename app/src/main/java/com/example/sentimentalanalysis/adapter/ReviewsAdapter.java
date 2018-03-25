@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis.adapter;
+package com.example.sentimentalanalysis.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.mansi.sentimentalanalysis.R;
-import com.example.mansi.sentimentalanalysis.Utils;
-import com.example.mansi.sentimentalanalysis.model.Review;
+import com.example.sentimentalanalysis.R;
+import com.example.sentimentalanalysis.Utils;
+import com.example.sentimentalanalysis.model.Review;
 
 import java.util.ArrayList;
 

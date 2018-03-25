@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis.data;
+package com.example.sentimentalanalysis.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

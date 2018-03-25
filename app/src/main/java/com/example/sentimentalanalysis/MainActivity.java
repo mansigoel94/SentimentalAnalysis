@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis;
+package com.example.sentimentalanalysis;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,21 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.example.mansi.sentimentalanalysis.adapter.AppAdapter;
-import com.example.mansi.sentimentalanalysis.data.SentimentsContract;
-import com.example.mansi.sentimentalanalysis.data.SentimentsDbHelper;
-import com.example.mansi.sentimentalanalysis.model.App;
-import com.example.mansi.sentimentalanalysis.model.Review;
+import com.example.sentimentalanalysis.adapter.AppAdapter;
+import com.example.sentimentalanalysis.data.SentimentsContract;
+import com.example.sentimentalanalysis.data.SentimentsDbHelper;
+import com.example.sentimentalanalysis.model.App;
+import com.example.sentimentalanalysis.model.Review;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
-//edited for pushing and pulling jhghjghjgjhghj
 public class MainActivity extends AppCompatActivity {
 
     public static final String APP_KEY = "app_key";
@@ -46,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase writeDatabase;
     private SQLiteDatabase readDatabase;
     private ArrayList<App> appArrayList;
+    private ArrayList<App> filterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +61,39 @@ public class MainActivity extends AppCompatActivity {
         int id = cursor.getInt(0);
 
         appArrayList = new ArrayList<>();
+/*        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Netflix",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Whatsapp",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Instagram",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Facebook",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Rahul tinder",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Amazon",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Popers",
+                "Software Company", "4.5", "5.4 MB",
+                null));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Myntra",
+                "Software Company", "4.5", "5.4 MB",
+                null));*/
+
         appArrayList.add(new App(R.drawable.ic_netflix,
                 "Netflix",
                 "Software Company", "4.5", "5.4 MB",
@@ -95,13 +126,13 @@ public class MainActivity extends AppCompatActivity {
                 "Myntra",
                 "Software Company", "4.5", "5.4 MB",
                 fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,"df","dfsd",
-                "4.7","5.2 MB",fetchReviewsFromDatabase(id)));
+
+        updateSentimentalAnalysisValue(appArrayList);
 
 //        deleteAllAppsFromDatabase();
 //        insertAppIntoDatabase(appArrayList);
 
-        final ArrayList<App> filterList = new ArrayList<App>(appArrayList);
+        filterList = new ArrayList<App>(appArrayList);
 
         AppAdapter.ItemClickListener itemClickListener = new AppAdapter.ItemClickListener() {
             @Override
@@ -115,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                         null,
                         null,
                         null);
-
 
                 cursor.moveToFirst();
                 app_id = cursor.getInt(0);
@@ -131,6 +161,29 @@ public class MainActivity extends AppCompatActivity {
         rvApps.setLayoutManager(new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false));
         rvApps.setAdapter(adapter);
+
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filterList.clear();
+                s = s.toLowerCase();
+                for (App app : appArrayList) {
+//                    Log.d(TAG, "onQueryTextChange: app name "+app.getName());
+//                    Log.d(TAG, "onQueryTextChange: s "+s);
+                    if (app.getName().toLowerCase().contains(s)) {
+                        //   Log.d(TAG, "onQueryTextChange: if condition");
+                        filterList.add(app);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
 
 /*        searchview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -175,29 +228,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         */
-
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                filterList.clear();
-                s = s.toLowerCase();
-                for (App app : appArrayList) {
-//                    Log.d(TAG, "onQueryTextChange: app name "+app.getName());
-//                    Log.d(TAG, "onQueryTextChange: s "+s);
-                    if (app.getName().toLowerCase().contains(s)) {
-                        //   Log.d(TAG, "onQueryTextChange: if condition");
-                        filterList.add(app);
-                    }
-                }
-                adapter.notifyDataSetChanged();
-                return true;
-            }
-        });
 
     }
 
@@ -252,21 +282,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // action with ID action_refresh was selected
             case R.id.menu_all:
-            /*    Toast.makeText(this, "All selected", Toast.LENGTH_SHORT)
-                        .show();*/
                 filterApps(0);
                 break;
-            // action with ID action_settings was selected
             case R.id.menu_fraud:
-              /*  Toast.makeText(this, "Fraud selected", Toast.LENGTH_SHORT)
-                        .show();*/
                 filterApps(1);
                 break;
             case R.id.menu_fair:
-               /* Toast.makeText(this, "Fair selected", Toast.LENGTH_SHORT)
-                        .show();*/
                 filterApps(2);
                 break;
         }
@@ -274,12 +296,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filterApps(int type) {
-      /*  switch (type) {
+        switch (type) {
+            case 0:
+                Log.d(TAG, "filterApps: all " + appArrayList.size());
+                filterList.clear();
+                filterList.addAll(appArrayList);
+                adapter.notifyDataSetChanged();
+                searchview.setVisibility(View.VISIBLE);
+                break;
             case 1:
+                filterList.clear();
+                for (App app : appArrayList) {
+                    if (!app.isPositive()) {
+                        filterList.add(app);
+                    }
+                }
+                Log.d(TAG, "filterApps: neg filter " + filterList.size());
+                adapter.notifyDataSetChanged();
+                searchview.setVisibility(View.GONE);
+                break;
+            case 2:
+                filterList.clear();
+                for (App app : appArrayList) {
+                    if (app.isPositive()) {
+                        filterList.add(app);
+                    }
+                }
+                Log.d(TAG, "filterApps: positive " + filterList.size());
+                adapter.notifyDataSetChanged();
+                searchview.setVisibility(View.GONE);
+                break;
+        }
+    }
 
-        }*/
-        ArrayList<App> positiveApps = new ArrayList<>();
-        ArrayList<App> negativeApps = new ArrayList<>();
+    public void updateSentimentalAnalysisValue(ArrayList<App> appArrayList) {
+//        ArrayList<App> positiveApps = new ArrayList<>();
+//        ArrayList<App> negativeApps = new ArrayList<>();
         int positiveCount = 0;
         int negativeCount = 0;
 
@@ -287,10 +339,7 @@ public class MainActivity extends AppCompatActivity {
             for (Review review : app.getReviewArrayList()) {
                 //searching for positive words in single review
                 for (String positive : Constants.positiveWords) {
-                    Log.d(TAG, "filterApps: 1st param " + review.getReview().toLowerCase());
-                    Log.d(TAG, "filterApps: 2nd param " + positive);
                     if (review.getReview().toLowerCase().contains(positive)) {
-                        Log.d(TAG, "filterApps: entered if");
                         positiveCount++;
                     }
                 }
@@ -306,24 +355,30 @@ public class MainActivity extends AppCompatActivity {
             //now lets calculate its sentimental value percentage
 
             //=because neutral apps will be considered as positive
-
             if (positiveCount == 0 && negativeCount == 0) {
                 Log.d(TAG, "filterApps: " + app.getName() + " positive percentage= 0***");
+                app.setIspositive(true);
+                app.setSentiValue(0);
+//                positiveApps.add(app);
             } else if (positiveCount >= negativeCount) {
-                /*if (positiveCount + negativeCount == 0) {
-                    Log.d(TAG, "filterApps: " + app.getName() + " positive percentage= 0****");
-                } else {*/
                 Log.d(TAG, "filterApps: " + app.getName() + " positive percentage= "
-                        + (float)(positiveCount - negativeCount) / (float)(positiveCount + negativeCount) * 100);
+                        + (float) (positiveCount - negativeCount) / (float) (positiveCount + negativeCount) * 100);
+                float sentiValue = (float) (positiveCount - negativeCount) / (float) (positiveCount + negativeCount) * 100;
+                app.setIspositive(true);
+                app.setSentiValue(sentiValue);
+//                positiveApps.add(app);
 
             } else {
                 Log.d(TAG, "filterApps: " + app.getName() + " negative percentage= "
-                        + (negativeCount - positiveCount) / (positiveCount + negativeCount) * 100);
+                        + (float) (negativeCount - positiveCount) / (float) (positiveCount + negativeCount) * 100);
+                float sentiValue = (float) (negativeCount - positiveCount) / (float) (positiveCount + negativeCount) * 100;
+                app.setIspositive(false);
+                app.setSentiValue(sentiValue);
+//                negativeApps.add(app);
             }
             positiveCount = 0;
             negativeCount = 0;
         }
-
     }
 
     @Override

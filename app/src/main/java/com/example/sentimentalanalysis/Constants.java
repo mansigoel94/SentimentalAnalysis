@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis;
+package com.example.sentimentalanalysis;
 
 public class Constants {
     public static String[] positiveWords = {"good", "wow", "well", "usable", "trust"};

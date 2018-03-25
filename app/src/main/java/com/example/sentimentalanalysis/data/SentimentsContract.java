@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis.data;
+package com.example.sentimentalanalysis.data;
 
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -10,7 +10,7 @@ public final class SentimentsContract {
     private SentimentsContract() {
     }
 
-    public static final String CONTENT_AUTHORITY = "com.example.mansi.sentimentalanalysis";
+    public static final String CONTENT_AUTHORITY = "com.example.sentimentalanalysis";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 

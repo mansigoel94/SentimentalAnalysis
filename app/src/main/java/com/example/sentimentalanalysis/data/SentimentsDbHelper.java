@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis.data;
+package com.example.sentimentalanalysis.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

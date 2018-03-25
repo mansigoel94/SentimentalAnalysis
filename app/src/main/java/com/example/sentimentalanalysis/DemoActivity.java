@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis;
+package com.example.sentimentalanalysis;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

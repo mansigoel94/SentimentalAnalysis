@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis.adapter;
+package com.example.sentimentalanalysis.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.mansi.sentimentalanalysis.R;
-import com.example.mansi.sentimentalanalysis.model.App;
+import com.example.sentimentalanalysis.R;
+import com.example.sentimentalanalysis.model.App;
 
 import java.util.ArrayList;
 
@@ -34,7 +34,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View root = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_app, parent, false);
-        return new ViewHolder(root,itemClickListener);
+        return new ViewHolder(root, itemClickListener);
     }
 
     @Override
@@ -46,6 +46,18 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.tvCompany.setText(currentApp.getCompany());
         holder.tvRating.setText(currentApp.getRating());
         holder.tvSize.setText(currentApp.getSize());
+        holder.tvSentiValue.setText((int) currentApp.getSentiValue() + "%");
+        if (currentApp.isPositive()) {
+            holder.tvSentiValue.setTextColor(
+                    context.getResources().getColor(R.color.green));
+            holder.ivThumbIc.setImageDrawable(
+                    context.getResources().getDrawable(R.drawable.ic_thumbs_up));
+        } else {
+            holder.tvSentiValue.setTextColor(
+                    context.getResources().getColor(R.color.red));
+            holder.ivThumbIc.setImageDrawable(
+                    context.getResources().getDrawable(R.drawable.ic_thumbs_down));
+        }
     }
 
     @Override
@@ -66,6 +78,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         TextView tvRating;
         @BindView(R.id.iv_star)
         ImageView ivStar;
+        @BindView(R.id.tv_senti_value)
+        TextView tvSentiValue;
+        @BindView(R.id.iv_thumb_ic)
+        ImageView ivThumbIc;
 
         public ViewHolder(View itemView, final ItemClickListener itemClickListener) {
             super(itemView);

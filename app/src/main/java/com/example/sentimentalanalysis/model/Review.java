@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis.model;
+package com.example.sentimentalanalysis.model;
 
 import java.io.Serializable;
 

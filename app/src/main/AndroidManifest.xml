@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mansi.sentimentalanalysis">
+    package="com.example.sentimentalanalysis">
 
     <application
         android:allowBackup="true"
@@ -27,7 +27,7 @@
 
         <provider
             android:name=".data.SentimentsProvider"
-            android:authorities="com.example.mansi.sentimentalanalysis"
+            android:authorities="com.example.sentimentalanalysis"
             android:exported="false" />
 
         <activity android:name=".DemoActivity"

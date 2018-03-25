@@ -1,4 +1,4 @@
-package com.example.mansi.sentimentalanalysis;
+package com.example.sentimentalanalysis;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -21,15 +21,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mansi.sentimentalanalysis.adapter.ReviewsAdapter;
-import com.example.mansi.sentimentalanalysis.data.SentimentsContract;
+import com.example.sentimentalanalysis.adapter.ReviewsAdapter;
+import com.example.sentimentalanalysis.data.SentimentsContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import com.example.mansi.sentimentalanalysis.model.App;
-import com.example.mansi.sentimentalanalysis.model.Review;
+import com.example.sentimentalanalysis.model.App;
+import com.example.sentimentalanalysis.model.Review;
 
 import java.util.ArrayList;
 
