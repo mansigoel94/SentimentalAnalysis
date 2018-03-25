@@ -13,28 +13,26 @@
         tools:context="com.example.sentimentalanalysis.DetailActivity">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_banner"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorAccent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_netflix" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/iv_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/iv_banner"
             app:srcCompat="@drawable/ic_netflix" />
 
         <TextView
@@ -47,8 +45,8 @@
             android:text="Netflix"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@id/imageView" />
+            app:layout_constraintStart_toEndOf="@+id/iv_logo"
+            app:layout_constraintTop_toBottomOf="@id/iv_banner" />
 
         <TextView
             android:id="@+id/tv_company"
@@ -87,7 +85,7 @@
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/view"
-            app:layout_constraintTop_toBottomOf="@id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
         <TextView
             android:id="@+id/tv_downloads_label"
@@ -111,7 +109,7 @@
             android:textSize="24sp"
             app:layout_constraintLeft_toRightOf="@id/view"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
         <RatingBar
             android:id="@+id/rating_bar_indicator"
@@ -168,6 +166,7 @@
         <EditText
             android:id="@+id/et_review"
             android:layout_width="0dp"
+            android:singleLine="true"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

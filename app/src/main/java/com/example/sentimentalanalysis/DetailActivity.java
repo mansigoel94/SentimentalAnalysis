@@ -35,10 +35,10 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
-    @BindView(R.id.imageView2)
-    ImageView imageView2;
+    @BindView(R.id.iv_banner)
+    ImageView ivBanner;
+    @BindView(R.id.iv_logo)
+    ImageView ivLogo;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_company)
@@ -87,6 +87,7 @@ public class DetailActivity extends AppCompatActivity {
             tvRating.setText(app.getRating());
             ratingBarIndicator.setRating(Float.parseFloat(app.getRating()));
             appPos = getIntent().getIntExtra(MainActivity.APP_ID, -1);
+            setImageDrawable(tvName.getText().toString());
         }
 
         rv_reviews.setNestedScrollingEnabled(false);
@@ -245,5 +246,42 @@ public class DetailActivity extends AppCompatActivity {
             etReview.clearFocus();
             ratingBar.setRating(0);
         }
+    }
+
+    public void setImageDrawable(String imageDrawable) {
+        if (imageDrawable.equalsIgnoreCase("Netflix")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_netflix_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_netflix));
+        }
+        if (imageDrawable.equalsIgnoreCase("Whatsapp")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_whatsapp_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_whatsapp));
+        }
+        if (imageDrawable.equalsIgnoreCase("Instagram")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_insta_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_insta));
+        }
+        if (imageDrawable.equalsIgnoreCase("Facebook")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_fb_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fb));
+        }
+        if (imageDrawable.equalsIgnoreCase("Chat")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+        }
+        if (imageDrawable.equalsIgnoreCase("Amazon")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_amazon_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_amazon));
+        }
+        if (imageDrawable.equalsIgnoreCase("Popers")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat_2));
+        }
+        if (imageDrawable.equalsIgnoreCase("Snapchat")) {
+            ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_snapchat_banner));
+            ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_snapchat));
+        }
+
+
     }
 }

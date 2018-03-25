@@ -58,26 +58,26 @@ public class MainActivity extends AppCompatActivity {
         appArrayList.add(new App(R.drawable.ic_netflix,
                 "Netflix",
                 "Software Company", "4.5", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
+        appArrayList.add(new App(R.drawable.ic_whatsapp,
                 "Whatsapp",
                 "Software Company", "4.2", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
+        appArrayList.add(new App(R.drawable.ic_insta,
                 "Instagram",
                 "Software Company", "4.1", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
+        appArrayList.add(new App(R.drawable.ic_fb,
                 "Facebook",
                 "Software Company", "4.7", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Rahul tinder",
+        appArrayList.add(new App(R.drawable.ic_chat,
+                "Chat",
                 "Software Company", "2.1", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
+        appArrayList.add(new App(R.drawable.ic_amazon,
                 "Amazon",
                 "Software Company", "3.7", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
+        appArrayList.add(new App(R.drawable.ic_chat_2,
                 "Popers",
                 "Software Company", "1.2", "5.4 MB"));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Myntra",
+        appArrayList.add(new App(R.drawable.ic_snapchat,
+                "Snapchat",
                 "Software Company", "3.4", "5.4 MB"));
 
         //todo netflix hardcoded here so as to get 1st app id
@@ -94,14 +94,12 @@ public class MainActivity extends AppCompatActivity {
             for (App app : appArrayList) {
                 fetchReviewsAndSetToAppObject(app, id++);
             }
-            // fetchReviewsAndSetToAppObject(appArrayList, cursor.getInt(0));
         } else {
             cursor.moveToFirst();
             int id = cursor.getInt(0);
             for (App app : appArrayList) {
                 fetchReviewsAndSetToAppObject(app, id++);
             }
-            // fetchReviewsAndSetToAppObject(app, cursor.getInt(0));
         }
 
         updateSentimentalAnalysisValue(appArrayList);
