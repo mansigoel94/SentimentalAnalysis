@@ -16,6 +16,15 @@ public class App implements Serializable {
     private float sentiValue;
 
     public App(@DrawableRes int imageDrawable, String name, String company,
+               String rating, String size) {
+        this.imageDrawable = imageDrawable;
+        this.name = name;
+        this.company = company;
+        this.rating = rating;
+        this.size = size;
+    }
+
+    public App(@DrawableRes int imageDrawable, String name, String company,
                String rating, String size, ArrayList<Review> reviewArrayList) {
         this.imageDrawable = imageDrawable;
         this.name = name;
@@ -76,6 +85,10 @@ public class App implements Serializable {
 
     public void setSentiValue(float sentiValue) {
         this.sentiValue = sentiValue;
+    }
+
+    public void setReviewArrayList(ArrayList<Review> reviewArrayList) {
+        this.reviewArrayList = reviewArrayList;
     }
 
 }

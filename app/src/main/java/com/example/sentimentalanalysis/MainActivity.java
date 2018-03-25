@@ -54,83 +54,57 @@ public class MainActivity extends AppCompatActivity {
         writeDatabase = dbHelper.getWritableDatabase();
         readDatabase = dbHelper.getReadableDatabase();
 
+        appArrayList = new ArrayList<>();
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Netflix",
+                "Software Company", "4.5", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Whatsapp",
+                "Software Company", "4.2", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Instagram",
+                "Software Company", "4.1", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Facebook",
+                "Software Company", "4.7", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Rahul tinder",
+                "Software Company", "2.1", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Amazon",
+                "Software Company", "3.7", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Popers",
+                "Software Company", "1.2", "5.4 MB"));
+        appArrayList.add(new App(R.drawable.ic_netflix,
+                "Myntra",
+                "Software Company", "3.4", "5.4 MB"));
+
+        //todo netflix hardcoded here so as to get 1st app id
         Cursor cursor = readDatabase.query(SentimentsContract.SentimentsEntry.APP_TABLE_NAME,
                 null, SentimentsContract.SentimentsEntry.COL_APP_NAME + "=?",
                 new String[]{"Netflix"}, null, null, null);
-        cursor.moveToFirst();
-        int id = cursor.getInt(0);
-
-        appArrayList = new ArrayList<>();
-/*        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Netflix",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Whatsapp",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Instagram",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Facebook",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Rahul tinder",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Amazon",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Popers",
-                "Software Company", "4.5", "5.4 MB",
-                null));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Myntra",
-                "Software Company", "4.5", "5.4 MB",
-                null));*/
-
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Netflix",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Whatsapp",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Instagram",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Facebook",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Rahul tinder",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Amazon",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Popers",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
-        appArrayList.add(new App(R.drawable.ic_netflix,
-                "Myntra",
-                "Software Company", "4.5", "5.4 MB",
-                fetchReviewsFromDatabase(id++)));
+        if (cursor.getCount() == 0) {
+            insertAppIntoDatabase(appArrayList);
+            cursor = readDatabase.query(SentimentsContract.SentimentsEntry.APP_TABLE_NAME,
+                    null, SentimentsContract.SentimentsEntry.COL_APP_NAME + "=?",
+                    new String[]{"Netflix"}, null, null, null);
+            cursor.moveToFirst();
+            int id = cursor.getInt(0);
+            for (App app : appArrayList) {
+                fetchReviewsAndSetToAppObject(app, id++);
+            }
+            // fetchReviewsAndSetToAppObject(appArrayList, cursor.getInt(0));
+        } else {
+            cursor.moveToFirst();
+            int id = cursor.getInt(0);
+            for (App app : appArrayList) {
+                fetchReviewsAndSetToAppObject(app, id++);
+            }
+            // fetchReviewsAndSetToAppObject(app, cursor.getInt(0));
+        }
 
         updateSentimentalAnalysisValue(appArrayList);
-
-//        deleteAllAppsFromDatabase();
-//        insertAppIntoDatabase(appArrayList);
 
         filterList = new ArrayList<App>(appArrayList);
 
@@ -246,7 +220,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<Review> fetchReviewsFromDatabase(int app_id) {
+    public void fetchReviewsAndSetToAppObject(App app,
+                                              int app_id) {
+        ArrayList<Review> reviewArrayList = new ArrayList<>();
         Cursor cursor = readDatabase.query(
                 SentimentsContract.SentimentsEntry.REVIEWS_TABLE_NAME,
                 null,
@@ -254,15 +230,18 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{String.valueOf(app_id)},
                 null, null, null);
 
-        ArrayList<Review> reviewArrayList = new ArrayList<>();
+        Log.d(TAG, "fetchReviewsAndSetToAppObject: cursor count " + cursor.getCount());
+
+        reviewArrayList.clear();
         while (cursor.moveToNext()) {
             reviewArrayList.add(new Review(cursor.getString(2),
                     cursor.getFloat(3),
                     cursor.getLong(4)));
         }
         Log.d(TAG, "fetchReviewsFromDatabase: reviews size " + reviewArrayList.size());
-        return reviewArrayList;
+        app.setReviewArrayList(reviewArrayList);
     }
+
 
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
@@ -330,13 +309,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateSentimentalAnalysisValue(ArrayList<App> appArrayList) {
-//        ArrayList<App> positiveApps = new ArrayList<>();
-//        ArrayList<App> negativeApps = new ArrayList<>();
         int positiveCount = 0;
         int negativeCount = 0;
 
         for (App app : appArrayList) {
+            Log.d(TAG, "updateSentimentalAnalysisValue: 1st loop " + app.getReviewArrayList());
             for (Review review : app.getReviewArrayList()) {
+                Log.d(TAG, "updateSentimentalAnalysisValue: 2nd loop");
                 //searching for positive words in single review
                 for (String positive : Constants.positiveWords) {
                     if (review.getReview().toLowerCase().contains(positive)) {
@@ -346,6 +325,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //searching for negative words in single review
                 for (String negative : Constants.negativeWords) {
+                    Log.d(TAG, "updateSentimentalAnalysisValue: 1st param " + review.getReview().toLowerCase());
+                    Log.d(TAG, "updateSentimentalAnalysisValue: 2nd param " + negative);
                     if (review.getReview().toLowerCase().contains(negative)) {
                         negativeCount++;
                     }
@@ -355,6 +336,8 @@ public class MainActivity extends AppCompatActivity {
             //now lets calculate its sentimental value percentage
 
             //=because neutral apps will be considered as positive
+            Log.d(TAG, "updateSentimentalAnalysisValue: positive "
+                    + positiveCount + " negative " + negativeCount);
             if (positiveCount == 0 && negativeCount == 0) {
                 Log.d(TAG, "filterApps: " + app.getName() + " positive percentage= 0***");
                 app.setIspositive(true);
