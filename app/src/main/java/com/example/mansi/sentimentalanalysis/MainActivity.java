@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
+//edited for pushing and pulling
 public class MainActivity extends AppCompatActivity {
 
     public static final String APP_KEY = "app_key";
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rv_apps)
     RecyclerView rvApps;
     @BindView(R.id.searchview)
-            
+
     SearchView searchview;
     private AppAdapter adapter;
     private static final String TAG = "MainActivity";
