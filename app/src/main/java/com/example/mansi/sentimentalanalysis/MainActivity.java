@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rv_apps)
     RecyclerView rvApps;
     @BindView(R.id.searchview)
+            
     SearchView searchview;
     private AppAdapter adapter;
     private static final String TAG = "MainActivity";
