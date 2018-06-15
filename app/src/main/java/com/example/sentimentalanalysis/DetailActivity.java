@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import com.example.sentimentalanalysis.model.App;
 import com.example.sentimentalanalysis.model.Review;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
@@ -72,6 +73,8 @@ public class DetailActivity extends AppCompatActivity {
     private ReviewsAdapter adapter;
     private ArrayList<Review> reviewsArrayList;
     private int appPos;
+    private float avgRating;
+    private float sumRating = 0.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,72 +82,63 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
+        rv_reviews.setNestedScrollingEnabled(false);
+
         if (getIntent().getIntExtra(MainActivity.APP_ID, -1) != -1) {
             App app = (App) getIntent().getSerializableExtra(MainActivity.APP_KEY);
             tvName.setText(app.getName());
             tvCompany.setText(app.getCompany());
             tvSize.setText(app.getSize());
-            tvRating.setText(app.getRating());
-            ratingBarIndicator.setRating(Float.parseFloat(app.getRating()));
             appPos = getIntent().getIntExtra(MainActivity.APP_ID, -1);
             setImageDrawable(tvName.getText().toString());
         }
-
-        rv_reviews.setNestedScrollingEnabled(false);
-
-    /*    getContentResolver().delete(SentimentsContract.SentimentsEntry.CONTENT_URI,
-                null,null);*/
-
         Cursor cursor = getContentResolver().query(
                 SentimentsContract.SentimentsEntry.CONTENT_URI,
                 null,
                 SentimentsContract.SentimentsEntry.COLUMN_APP_ID + "=?",
                 new String[]{String.valueOf(appPos)}, null);
-
-      /*  Cursor cursor = getContentResolver().query(
-                SentimentsContract.SentimentsEntry.CONTENT_URI,
-                null,
-                null,
-                null,null);*/
-
         Log.d(TAG, "onCreate: cursor count " + cursor.getCount());
 
         reviewsArrayList = convertCursorsToReviewsList(cursor);
+
+        setRating();
+
         adapter = new ReviewsAdapter(reviewsArrayList, this);
         rv_reviews.setLayoutManager(new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false));
         rv_reviews.setAdapter(adapter);
     }
 
+    private void setRating() {
+        DecimalFormat decimalFormat = new DecimalFormat();
+        decimalFormat.setMaximumFractionDigits(1);
+        if (decimalFormat.format(avgRating).equalsIgnoreCase("NaN")) {
+            tvRating.setText("0.0");
+            ratingBarIndicator.setRating(0.0f);
+        } else {
+            tvRating.setText(decimalFormat.format(avgRating));
+            ratingBarIndicator.setRating(Float.parseFloat(decimalFormat.format(avgRating)));
+        }
+    }
+
     public ArrayList<Review> convertCursorsToReviewsList(Cursor cursor) {
         ArrayList<Review> reviewArrayList = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            //todo remove hardcoding from here also
+        Log.d(TAG, "convertCursorsToReviewsList: " + cursor.getCount());
+        if (cursor.moveToFirst()) {
             reviewArrayList.add(new Review(cursor.getString(2),
                     cursor.getFloat(3),
                     cursor.getLong(4)));
+            sumRating = sumRating + cursor.getFloat(3);
+            while (cursor.moveToNext()) {
+                reviewArrayList.add(new Review(cursor.getString(2),
+                        cursor.getFloat(3),
+                        cursor.getLong(4)));
+                sumRating = sumRating + cursor.getFloat(3);
+            }
         }
+        avgRating = sumRating / reviewArrayList.size();
         return reviewArrayList;
     }
-
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // action with ID action_refresh was selected
-            case R.id.menu_save:
-                Toast.makeText(this, "Saved", Toast.LENGTH_SHORT)
-                        .show();
-                break;
-        }
-        return true;
-    }*/
 
     @Override
     public void onBackPressed() {
@@ -152,33 +146,6 @@ public class DetailActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-    /**** Method for Setting the Height of the ListView dynamically.
-     **** Hack to fix the issue of not showing all the items of the ListView
-     **** when placed inside a ScrollView  ****/
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            Log.d(TAG, "setListViewHeightBasedOnChildren: null");
-            return;
-        }
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
-
 
     @OnClick(R.id.btn_submit)
     public void onViewClicked() {
@@ -234,10 +201,12 @@ public class DetailActivity extends AppCompatActivity {
                     null, null, null, null);
 
             if (cursor.moveToFirst()) {
-                //todo remove hardcoding from here
                 reviewsArrayList.add(new Review(cursor.getString(2),
                         cursor.getFloat(3),
                         cursor.getLong(4)));
+                sumRating = sumRating + cursor.getFloat(3);
+                avgRating = sumRating / reviewsArrayList.size();
+                setRating();
                 adapter.notifyDataSetChanged();
             }
 
@@ -281,7 +250,5 @@ public class DetailActivity extends AppCompatActivity {
             ivBanner.setImageDrawable(getResources().getDrawable(R.drawable.ic_snapchat_banner));
             ivLogo.setImageDrawable(getResources().getDrawable(R.drawable.ic_snapchat));
         }
-
-
     }
 }

@@ -44,7 +44,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 context.getResources().getDrawable(currentApp.getImageDrawable()));
         holder.tvName.setText(currentApp.getName());
         holder.tvCompany.setText(currentApp.getCompany());
-        holder.tvRating.setText(currentApp.getRating());
+        if (currentApp.getRating() != null) {
+            holder.tvRating.setText(currentApp.getRating());
+        } else {
+            holder.tvRating.setText("0.0");
+        }
         holder.tvSize.setText(currentApp.getSize());
         holder.tvSentiValue.setText((int) currentApp.getSentiValue() + "%");
         if (currentApp.isPositive()) {

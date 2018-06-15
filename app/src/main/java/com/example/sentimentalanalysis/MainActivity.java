@@ -23,6 +23,7 @@ import com.example.sentimentalanalysis.data.SentimentsDbHelper;
 import com.example.sentimentalanalysis.model.App;
 import com.example.sentimentalanalysis.model.Review;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -57,30 +58,29 @@ public class MainActivity extends AppCompatActivity {
         appArrayList = new ArrayList<>();
         appArrayList.add(new App(R.drawable.ic_netflix,
                 "Netflix",
-                "Software Company", "4.5", "5.4 MB"));
+                "Software Company", getAverageRating(1), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_whatsapp,
                 "Whatsapp",
-                "Software Company", "4.2", "5.4 MB"));
+                "Software Company", getAverageRating(2), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_insta,
                 "Instagram",
-                "Software Company", "4.1", "5.4 MB"));
+                "Software Company", getAverageRating(3), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_fb,
                 "Facebook",
-                "Software Company", "4.7", "5.4 MB"));
+                "Software Company", getAverageRating(4), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_chat,
                 "Chat",
-                "Software Company", "2.1", "5.4 MB"));
+                "Software Company", getAverageRating(5), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_amazon,
                 "Amazon",
-                "Software Company", "3.7", "5.4 MB"));
+                "Software Company", getAverageRating(6), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_chat_2,
                 "Popers",
-                "Software Company", "1.2", "5.4 MB"));
+                "Software Company", getAverageRating(7), "5.4 MB"));
         appArrayList.add(new App(R.drawable.ic_snapchat,
                 "Snapchat",
-                "Software Company", "3.4", "5.4 MB"));
+                "Software Company", getAverageRating(8), "5.4 MB"));
 
-        //todo netflix hardcoded here so as to get 1st app id
         Cursor cursor = readDatabase.query(SentimentsContract.SentimentsEntry.APP_TABLE_NAME,
                 null, SentimentsContract.SentimentsEntry.COL_APP_NAME + "=?",
                 new String[]{"Netflix"}, null, null, null);
@@ -145,10 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 filterList.clear();
                 s = s.toLowerCase();
                 for (App app : appArrayList) {
-//                    Log.d(TAG, "onQueryTextChange: app name "+app.getName());
-//                    Log.d(TAG, "onQueryTextChange: s "+s);
                     if (app.getName().toLowerCase().contains(s)) {
-                        //   Log.d(TAG, "onQueryTextChange: if condition");
                         filterList.add(app);
                     }
                 }
@@ -156,51 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
-/*        searchview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                Log.d(TAG, "onFocusChange: " + b);
-            }
-        });
-
-        searchview.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                Log.d(TAG, "onClose() called");
-                return false;
-            }
-        });
-
-        searchview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (searchview.hasFocus()) {
-                    Log.d(TAG, "onClick: focus");
-                } else {
-                    Log.d(TAG, "onClick: focus lost");
-                }
-            }
-        });*/
-
-        //todo close keyboard on click of close button of searchview
-        // Catch event on [x] button inside search view
-        /*
-        int searchCloseButtonId = searchview.getContext().getResources()
-                .getIdentifier("android:id/search_close_btn", null, null);
-        final ImageView closeButton = (ImageView) this.searchview.findViewById(searchCloseButtonId);
-        // Set on click listener
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchview.clearFocus();
-                hideKeyboard();
-                closeButton.setVisibility(View.GONE);
-            }
-        });
-        */
-
     }
 
     private void deleteAllAppsFromDatabase() {
@@ -228,26 +180,22 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{String.valueOf(app_id)},
                 null, null, null);
 
-        Log.d(TAG, "fetchReviewsAndSetToAppObject: cursor count " + cursor.getCount());
-
         reviewArrayList.clear();
         while (cursor.moveToNext()) {
             reviewArrayList.add(new Review(cursor.getString(2),
                     cursor.getFloat(3),
                     cursor.getLong(4)));
         }
-        Log.d(TAG, "fetchReviewsFromDatabase: reviews size " + reviewArrayList.size());
         app.setReviewArrayList(reviewArrayList);
     }
 
-
-    private void hideKeyboard() {
+   /* private void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -340,14 +288,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "filterApps: " + app.getName() + " positive percentage= 0***");
                 app.setIspositive(true);
                 app.setSentiValue(0);
-//                positiveApps.add(app);
             } else if (positiveCount >= negativeCount) {
                 Log.d(TAG, "filterApps: " + app.getName() + " positive percentage= "
                         + (float) (positiveCount - negativeCount) / (float) (positiveCount + negativeCount) * 100);
                 float sentiValue = (float) (positiveCount - negativeCount) / (float) (positiveCount + negativeCount) * 100;
                 app.setIspositive(true);
                 app.setSentiValue(sentiValue);
-//                positiveApps.add(app);
 
             } else {
                 Log.d(TAG, "filterApps: " + app.getName() + " negative percentage= "
@@ -355,10 +301,35 @@ public class MainActivity extends AppCompatActivity {
                 float sentiValue = (float) (negativeCount - positiveCount) / (float) (positiveCount + negativeCount) * 100;
                 app.setIspositive(false);
                 app.setSentiValue(sentiValue);
-//                negativeApps.add(app);
             }
             positiveCount = 0;
             negativeCount = 0;
+        }
+    }
+
+    public String getAverageRating(int appPos) {
+        float sumRating = 0.0f;
+        int ctr = 0;
+        Cursor cursor = getContentResolver().query(
+                SentimentsContract.SentimentsEntry.CONTENT_URI,
+                null,
+                SentimentsContract.SentimentsEntry.COLUMN_APP_ID + "=?",
+                new String[]{String.valueOf(appPos)}, null);
+
+        if (cursor.moveToFirst()) {
+            sumRating = sumRating + cursor.getFloat(3);
+            ctr++;
+            while (cursor.moveToNext()) {
+                sumRating = sumRating + cursor.getFloat(3);
+                ctr++;
+            }
+        }
+        if (ctr != 0) {
+            DecimalFormat decimalFormat = new DecimalFormat();
+            decimalFormat.setMaximumFractionDigits(1);
+            return decimalFormat.format(sumRating / ctr);
+        } else {
+            return null;
         }
     }
 
